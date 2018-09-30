@@ -40,7 +40,7 @@ klick_counter = 0
 ix = 0
 iy = 0
 ch_poi = np.zeros((2,2))  	#chosen point
-koord = np.zeros((2,3))		# coordinates
+koord = np.zeros((2,3))		# coordinates. if we want to expand data set, the 2 needs to increase with however many nodes we need.
 
 """
 	FUNCTIONS
@@ -194,11 +194,11 @@ def main():
 						vector_12[0][i] = depth_point_1[i] - depth_point_2[i]
 					print ("the position of point 1 is " + str(depth_point_1), file=open(filename,"a"))
 					print ("the position of point 2 is " + str(depth_point_2), file=open(filename,"a"))
-					print ("the vector between the two points is " + str(vector_12))
-					dist_12 = math.sqrt(vector_12[0][0]**2 + vector_12[0][1]**2 + vector_12[0][2]**2)
-					dist_12 = dist_12 * 1000
-					dist_12 = int(dist_12)
-					print ("the 3D distance between points is " + str(dist_12) + "mm")
+					# print ("the vector between the two points is " + str(vector_12))
+					# dist_12 = math.sqrt(vector_12[0][0]**2 + vector_12[0][1]**2 + vector_12[0][2]**2)
+					# dist_12 = dist_12 * 1000
+					# dist_12 = int(dist_12)
+					# print ("the 3D distance between points is " + str(dist_12) + "mm")
 					step_4 = False
 			except:
 				print ("error at fifth try")
