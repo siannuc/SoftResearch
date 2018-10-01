@@ -189,10 +189,11 @@ def main():
 						vector_12[0][i] = depth_point_1[i] - depth_point_2[i]
 					print ("the position of point 1 is " + str(depth_point_1))
 					print ("the position of point 2 is " + str(depth_point_2))
-					
-					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/tester1.csv", 'w') as csvfile: 
-						filewriter = csv.writer(csvfile, delimiter = ',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-						filewriter.writerow(str(depth_point_1[0][0]),str(depth_point_1[0][1]),str(depth_point_1[0][2]))
+
+					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/tester1.csv", 'a') as csvfile: 
+						filewriter = csv.writer(csvfile, delimiter = ',', quoting=csv.QUOTE_NONE, lineterminator = '\n')
+						# filewriter.writerow((depth_point_1[0][0],depth_point_1[0][1],depth_point_1[0][2]))
+						filewriter.writerow(depth_point_1)
 					# print ("the vector between the two points is " + str(vector_12))
 					# dist_12 = math.sqrt(vector_12[0][0]**2 + vector_12[0][1]**2 + vector_12[0][2]**2)
 					# dist_12 = dist_12 * 1000
