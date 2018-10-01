@@ -1,7 +1,3 @@
-"""
-Slinky 1.0 - ORGINAL CODE CAN BE FOUND IN copied.py
-"""
-
 """ 
 	import necessary packages
 """
@@ -13,7 +9,6 @@ from matplotlib import pyplot as plt
 import math
 import sys
 import platform
-import csv
 
 """
 	declare variables
@@ -41,7 +36,7 @@ klick_counter = 0
 ix = 0
 iy = 0
 ch_poi = np.zeros((2,2))  	#chosen point
-koord = np.zeros((2,3))		# coordinates. if we want to expand data set, the 2 needs to increase with however many nodes we need.
+koord = np.zeros((2,3))		# coordinates
 
 """
 	FUNCTIONS
@@ -68,12 +63,6 @@ WRITE SYSTEM PROPERTIES
 print ("Python Version: "+sys.version)
 print ("Windows Version: "+platform.platform())
 
-"""
-FILE NAME
-"""
-filename = input("Enter name for datafile: must contain .csv")
-with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data"+ filename +".csv", 'wb', 1) as csvfile: # filepath originally contained \ not /
-	filewriter = cvs.writer(csvfile, delimiter = ',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 
 """
 DEFINE STREAM PROPERTIES
@@ -93,7 +82,7 @@ profile = pipeline.start(config)
 # get the depth sensor scale
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
-print("Depth Scale is: "+ str(depth_scale), file=open(filename, "a"))
+print("Depth Scale is: ",depth_scale)
 
 # create an align object
 align_to = rs.stream.color
@@ -190,16 +179,14 @@ def main():
 
 			try:
 				if step_4 == True:
-					depth_point_1 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[0][0], koord[0][1]], koord[0][2]) #other code has the first arguement as the color_intrin
+					depth_point_1 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[0][0], koord[0][1]], koord[0][2])
 					depth_point_2 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[1][0], koord[1][1]], koord[1][2])
 					vector_12 = np.zeros((1,3))
 					for i in range(0,3):
 						vector_12[0][i] = depth_point_1[i] - depth_point_2[i]
-
-					filewriter.write(depth_point_1)
-					#print ("the position of point 1 is " + str(depth_point_1), file=open(filename,"a"))
-					#print ("the position of point 2 is " + str(depth_point_2), file=open(filename,"a"))
-					# print ("the vector between the two points is " + str(vector_12))
+					print ("the position of point 1 is " + str(depth_point_1))
+					print ("the position of point 2 is " + str(depth_point_2))
+					print ("the vector between the two points is " + str(vector_12))
 					# dist_12 = math.sqrt(vector_12[0][0]**2 + vector_12[0][1]**2 + vector_12[0][2]**2)
 					# dist_12 = dist_12 * 1000
 					# dist_12 = int(dist_12)
