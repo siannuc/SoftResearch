@@ -71,9 +71,7 @@ print ("Windows Version: "+platform.platform())
 """
 FILE NAME
 """
-filename = input("Enter name for datafile: must contain .csv")
-with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data"+ filename +".csv", 'wb', 1) as csvfile: # filepath originally contained \ not /
-	filewriter = cvs.writer(csvfile, delimiter = ',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+filename = input("Enter name for datafile:  ")
 
 """
 DEFINE STREAM PROPERTIES
@@ -81,10 +79,10 @@ DEFINE STREAM PROPERTIES
 #streams
 pipeline = rs.pipeline() 														#create pipeline
 config = rs.config()															#create a configuration
-config.enable_stream(rs.stream.color, columns, rows, rs.format.bgr8, f_rate)	#get the color stream
-config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
-config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
-config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
+# config.enable_stream(rs.stream.color, columns, rows, rs.format.bgr8, f_rate)	#get the color stream
+# config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
+# config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
+# config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
 
 # start streaming
 profile = config.resolve(pipeline)
@@ -93,7 +91,7 @@ profile = pipeline.start(config)
 # get the depth sensor scale
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
-print("Depth Scale is: "+ str(depth_scale), file=open(filename, "a"))
+print("Depth Scale is: "+ str(depth_scale))
 
 # create an align object
 align_to = rs.stream.color
@@ -196,6 +194,8 @@ def main():
 					for i in range(0,3):
 						vector_12[0][i] = depth_point_1[i] - depth_point_2[i]
 
+					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/"+ filename +".csv", 'wb', 1) as csvfile: # filepath originally contained \ not /
+						filewriter = csv.writer(csvfile, delimiter = ',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
 					filewriter.write(depth_point_1)
 					#print ("the position of point 1 is " + str(depth_point_1), file=open(filename,"a"))
 					#print ("the position of point 2 is " + str(depth_point_2), file=open(filename,"a"))
@@ -215,7 +215,7 @@ def main():
 			except:
 				print ("error occured during streaming")	
 
-			if cv2.waitKey(0) == 27: # when 0. program updates whenever button is pressed. when 1 program closes when escape is held
+			if cv2.waitKey(1) == 27: # when 0. program updates whenever button is pressed. when 1 program closes when escape is held
 				break
 	except:
 		print ("error occured in first try")

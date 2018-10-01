@@ -69,11 +69,12 @@ DEFINE STREAM PROPERTIES
 """
 #streams
 pipeline = rs.pipeline() 														#create pipeline
-config = rs.config()															#create a configuration
-config.enable_stream(rs.stream.color, columns, rows, rs.format.bgr8, f_rate)	#get the color stream
-config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
-config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
-config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
+config = rs.config()	
+# runtime error when notcommented out														#create a configuration
+# config.enable_stream(rs.stream.color, columns, 360, rs.format.bgr8, f_rate)	#get the color stream
+# config.enable_stream(rs.stream.depth, columns, 480, rs.format.z16, f_rate)		#get the depth stream
+# config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
+# config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
 
 # start streaming
 profile = config.resolve(pipeline)
@@ -202,7 +203,7 @@ def main():
 			except:
 				print ("error occured during streaming")	
 
-			if cv2.waitKey(0) == 27: # when 0. program updates whenever button is pressed. when 1 program closes when escape is held
+			if cv2.waitKey(1) == 27: # when 0. program updates whenever button is pressed. when 1 program closes when escape is held
 				break
 	except:
 		print ("error occured in first try")
