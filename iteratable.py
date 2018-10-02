@@ -64,8 +64,6 @@ WRITE SYSTEM PROPERTIES
 print ("Python Version: "+sys.version)
 print ("Windows Version: "+platform.platform())
 
-filename = input("Please Enter a Filename:  ")
-print("File location: C:/Users/Steve/Documents/GitHub/SoftResearch/Data/" + filename + ".csv")
 
 """
 DEFINE STREAM PROPERTIES
@@ -132,8 +130,10 @@ def main():
 					print("Test2")
 					step_1 = True
 					cv2.setMouseCallback('Align Example', get_mouse_position)
-					cv2.rectangle(color_image, (int(ch_poi[0][0]) - delta, int(ch_poi[0][1]) - delta), (int(ch_poi[0][0]) + delta, int(ch_poi[0][1]) + delta), red, 0)
-					cv2.rectangle(color_image, (int(ch_poi[1][0]) - delta, int(ch_poi[1][1]) - delta), (int(ch_poi[1][0]) + delta, int(ch_poi[1][1]) + delta), red, 0)
+					for i in range(0,2):
+						cv2.rectangle(color_image, (int(ch_poi[i][0]) - delta, int(ch_poi[i][1]) - delta), (int(ch_poi[i][0]) + delta, int(ch_poi[i][0]) + delta), red, 0)
+						# cv2.rectangle(color_image, (int(ch_poi[0][0]) - delta, int(ch_poi[0][1]) - delta), (int(ch_poi[0][0]) + delta, int(ch_poi[0][1]) + delta), red, 0)
+						# cv2.rectangle(color_image, (int(ch_poi[1][0]) - delta, int(ch_poi[1][1]) - delta), (int(ch_poi[1][0]) + delta, int(ch_poi[1][1]) + delta), red, 0)
 
 					# print ix and iy
 					if klick_counter <= 2:
@@ -149,19 +149,26 @@ def main():
 			try:
 				if step_2 == True:
 
-					corner_picture_0 = color_image[int(ch_poi[0][1]) - delta: int(ch_poi[0][1]) + delta, int(ch_poi[0][0]) - delta: int(ch_poi[0][0]) + delta]
-					corner_picture_1 = color_image[int(ch_poi[1][1]) - delta: int(ch_poi[1][1]) + delta, int(ch_poi[1][0]) - delta: int(ch_poi[1][0]) + delta]
+					for i in range(0,2):
+						corner_picture[i] = color_image[int(ch_poi[i][1]) - delta: int(ch_poi[i][1]) + delta, int(ch_poi[i][0]) - delta: int(ch_poi[i][0]) + delta]
 
+						# corner_picture_0 = color_image[int(ch_poi[0][1]) - delta: int(ch_poi[0][1]) + delta, int(ch_poi[0][0]) - delta: int(ch_poi[0][0]) + delta]
+						# corner_picture_1 = color_image[int(ch_poi[1][1]) - delta: int(ch_poi[1][1]) + delta, int(ch_poi[1][0]) - delta: int(ch_poi[1][0]) + delta]
 
-					koord[0][0], koord[0][1] = good_features_to_track(corner_picture_0)
-					koord[1][0], koord[1][1] = good_features_to_track(corner_picture_1)
+					for i in range(0,2):
+						koord[i][0], koord[i][1] = good_features_to_track(corner_picture[i])
+
+						# koord[0][0], koord[0][1] = good_features_to_track(corner_picture_0)
+						# koord[1][0], koord[1][1] = good_features_to_track(corner_picture_1)
 
 					for i in range(0,2):
 						koord[i][0] = ch_poi[i][0] - delta + koord[i][0]
 						koord[i][1] = ch_poi[i][1] - delta + koord[i][1]
 
-					cv2.rectangle(color_image, (int(koord[0][0]) - delta, int(koord[0][1]) - delta), (int(koord[0][0]) + delta, int(koord[0][1])+delta), green, 0)
-					cv2.rectangle(color_image, (int(koord[1][0]) - delta, int(koord[1][1]) - delta), (int(koord[1][0]) + delta, int(koord[1][1])+delta), green, 0)
+					for i in range(0,2):
+						cv2.rectangle(color_image, (int(koord[i][0]) - delta, int(koord[i][1]) - delta), (int(koord[i][0]) + delta, int(koord[i][1])+delta), green, 0)
+						# cv2.rectangle(color_image, (int(koord[0][0]) - delta, int(koord[0][1]) - delta), (int(koord[0][0]) + delta, int(koord[0][1])+delta), green, 0)
+						# cv2.rectangle(color_image, (int(koord[1][0]) - delta, int(koord[1][1]) - delta), (int(koord[1][0]) + delta, int(koord[1][1])+delta), green, 0)
 
 					step_3 = True
 			except:
@@ -184,17 +191,19 @@ def main():
 
 			try:
 				if step_4 == True:
-					depth_point_1 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[0][0], koord[0][1]], koord[0][2])
-					depth_point_2 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[1][0], koord[1][1]], koord[1][2])
-					vector_12 = np.zeros((1,3))
-					for i in range(0,3):
-						vector_12[0][i] = depth_point_1[i] - depth_point_2[i]
-					print ("the position of point 1 is " + str(depth_point_1))
-					print ("the position of point 2 is " + str(depth_point_2))
+					for i in range(0,2):
+						depth_point[i] = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[i][0],koord[i][1]], koord[i][2])
+						# depth_point_1 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[0][0], koord[0][1]], koord[0][2])
+						# depth_point_2 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[1][0], koord[1][1]], koord[1][2])
+					# vector_12 = np.zeros((1,3))
+					# for i in range(0,3):
+						# vector_12[0][i] = depth_point_1[i] - depth_point_2[i]
+					print ("the position of point 1 is " + str(depth_point[1]))
+					print ("the position of point 2 is " + str(depth_point[2]))
 
 					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/tester1.csv", 'a') as csvfile: 
 						filewriter = csv.writer(csvfile, delimiter = ',', quoting=csv.QUOTE_NONE, lineterminator = '\n')
-						filewriter.writerow(depth_point_1 + depth_point_2)
+						filewriter.writerow(depth_point[1] + depth_point[1])
 					# print ("the vector between the two points is " + str(vector_12))
 					# dist_12 = math.sqrt(vector_12[0][0]**2 + vector_12[0][1]**2 + vector_12[0][2]**2)
 					# dist_12 = dist_12 * 1000
