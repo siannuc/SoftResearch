@@ -91,8 +91,6 @@ print("Depth Scale is: ",depth_scale)
 align_to = rs.stream.color
 align = rs.align(align_to)
 
-
-
 """
 MAIN PROGRAM
 """
