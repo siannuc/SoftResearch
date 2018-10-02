@@ -38,6 +38,7 @@ ix = 0
 iy = 0
 ch_poi = np.zeros((2,2))  	#chosen point
 koord = np.zeros((2,3))		# coordinates
+color_picture = np.zeros(2)
 
 """
 	FUNCTIONS
@@ -88,8 +89,6 @@ print("Depth Scale is: ",depth_scale)
 # create an align object
 align_to = rs.stream.color
 align = rs.align(align_to)
-
-
 
 """
 MAIN PROGRAM
@@ -149,17 +148,17 @@ def main():
 			try:
 				if step_2 == True:
 
-					for i in range(0,2):
-						corner_picture[i] = color_image[int(ch_poi[i][1]) - delta: int(ch_poi[i][1]) + delta, int(ch_poi[i][0]) - delta: int(ch_poi[i][0]) + delta]
+					# for i in range(0,2):
+						# color_picture[i] = color_image[int(ch_poi[i][1]) - delta: int(ch_poi[i][1]) + delta, int(ch_poi[i][0]) - delta: int(ch_poi[i][0]) + delta]
 
-						# corner_picture_0 = color_image[int(ch_poi[0][1]) - delta: int(ch_poi[0][1]) + delta, int(ch_poi[0][0]) - delta: int(ch_poi[0][0]) + delta]
-						# corner_picture_1 = color_image[int(ch_poi[1][1]) - delta: int(ch_poi[1][1]) + delta, int(ch_poi[1][0]) - delta: int(ch_poi[1][0]) + delta]
+					corner_picture_0 = color_image[int(ch_poi[0][1]) - delta: int(ch_poi[0][1]) + delta, int(ch_poi[0][0]) - delta: int(ch_poi[0][0]) + delta]
+					corner_picture_1 = color_image[int(ch_poi[1][1]) - delta: int(ch_poi[1][1]) + delta, int(ch_poi[1][0]) - delta: int(ch_poi[1][0]) + delta]
 
-					for i in range(0,2):
-						koord[i][0], koord[i][1] = good_features_to_track(corner_picture[i])
+					# for i in range(0,2):
+						# koord[i][0], koord[i][1] = good_features_to_track(corner_picture[i])
 
-						# koord[0][0], koord[0][1] = good_features_to_track(corner_picture_0)
-						# koord[1][0], koord[1][1] = good_features_to_track(corner_picture_1)
+					koord[0][0], koord[0][1] = good_features_to_track(corner_picture_0)
+					koord[1][0], koord[1][1] = good_features_to_track(corner_picture_1)
 
 					for i in range(0,2):
 						koord[i][0] = ch_poi[i][0] - delta + koord[i][0]
@@ -167,8 +166,8 @@ def main():
 
 					for i in range(0,2):
 						cv2.rectangle(color_image, (int(koord[i][0]) - delta, int(koord[i][1]) - delta), (int(koord[i][0]) + delta, int(koord[i][1])+delta), green, 0)
-						# cv2.rectangle(color_image, (int(koord[0][0]) - delta, int(koord[0][1]) - delta), (int(koord[0][0]) + delta, int(koord[0][1])+delta), green, 0)
-						# cv2.rectangle(color_image, (int(koord[1][0]) - delta, int(koord[1][1]) - delta), (int(koord[1][0]) + delta, int(koord[1][1])+delta), green, 0)
+					# cv2.rectangle(color_image, (int(koord[0][0]) - delta, int(koord[0][1]) - delta), (int(koord[0][0]) + delta, int(koord[0][1])+delta), green, 0)
+					# cv2.rectangle(color_image, (int(koord[1][0]) - delta, int(koord[1][1]) - delta), (int(koord[1][0]) + delta, int(koord[1][1])+delta), green, 0)
 
 					step_3 = True
 			except:
@@ -201,9 +200,9 @@ def main():
 					print ("the position of point 1 is " + str(depth_point[1]))
 					print ("the position of point 2 is " + str(depth_point[2]))
 
-					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/tester1.csv", 'a') as csvfile: 
+					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/iteratetest.csv", 'a') as csvfile: 
 						filewriter = csv.writer(csvfile, delimiter = ',', quoting=csv.QUOTE_NONE, lineterminator = '\n')
-						filewriter.writerow(depth_point[1] + depth_point[1])
+						filewriter.writerow(depth_point[0] + depth_point[1])
 					# print ("the vector between the two points is " + str(vector_12))
 					# dist_12 = math.sqrt(vector_12[0][0]**2 + vector_12[0][1]**2 + vector_12[0][2]**2)
 					# dist_12 = dist_12 * 1000
