@@ -36,8 +36,8 @@ step_4 = False
 klick_counter = 0
 ix = 0
 iy = 0
-ch_poi = np.zeros((2,2))  	#chosen point
-koord = np.zeros((2,3))		# coordinates
+ch_poi = np.zeros((6,2))  	#chosen point
+koord = np.zeros((6,3))		# coordinates
 color_picture = np.zeros(2)
 
 """
@@ -72,10 +72,10 @@ DEFINE STREAM PROPERTIES
 #streams
 pipeline = rs.pipeline() 														#create pipeline
 config = rs.config()															#create a configuration
-# config.enable_stream(rs.stream.color, columns, rows, rs.format.bgr8, f_rate)	#get the color stream
-# config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
-# config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
-# config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
+config.enable_stream(rs.stream.color, columns, rows, rs.format.bgr8, f_rate)	#get the color stream
+config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
+config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
+config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
 
 # start streaming
 profile = config.resolve(pipeline)
@@ -129,16 +129,16 @@ def main():
 					print("Test2")
 					step_1 = True
 					cv2.setMouseCallback('Align Example', get_mouse_position)
-					for i in range(0,2):
+					for i in range(0,6):
 						cv2.rectangle(color_image, (int(ch_poi[i][0]) - delta, int(ch_poi[i][1]) - delta), (int(ch_poi[i][0]) + delta, int(ch_poi[i][0]) + delta), red, 0)
 						# cv2.rectangle(color_image, (int(ch_poi[0][0]) - delta, int(ch_poi[0][1]) - delta), (int(ch_poi[0][0]) + delta, int(ch_poi[0][1]) + delta), red, 0)
 						# cv2.rectangle(color_image, (int(ch_poi[1][0]) - delta, int(ch_poi[1][1]) - delta), (int(ch_poi[1][0]) + delta, int(ch_poi[1][1]) + delta), red, 0)
 
 					# print ix and iy
-					if klick_counter <= 2:
+					if klick_counter <= 6:
 						ch_poi[klick_counter-1][0] = ix
 						ch_poi[klick_counter-1][1] = iy
-						if klick_counter == 2:
+						if klick_counter == 6:
 							klick_counter = 0
 							step_1 = False
 							step_2 = True
@@ -153,18 +153,25 @@ def main():
 
 					corner_picture_0 = color_image[int(ch_poi[0][1]) - delta: int(ch_poi[0][1]) + delta, int(ch_poi[0][0]) - delta: int(ch_poi[0][0]) + delta]
 					corner_picture_1 = color_image[int(ch_poi[1][1]) - delta: int(ch_poi[1][1]) + delta, int(ch_poi[1][0]) - delta: int(ch_poi[1][0]) + delta]
-
+					corner_picture_2 = color_image[int(ch_poi[2][1]) - delta: int(ch_poi[2][1]) + delta, int(ch_poi[2][0]) - delta: int(ch_poi[2][0]) + delta]
+					corner_picture_3 = color_image[int(ch_poi[3][1]) - delta: int(ch_poi[3][1]) + delta, int(ch_poi[3][0]) - delta: int(ch_poi[3][0]) + delta]
+					corner_picture_4 = color_image[int(ch_poi[4][1]) - delta: int(ch_poi[4][1]) + delta, int(ch_poi[4][0]) - delta: int(ch_poi[4][0]) + delta]
+					corner_picture_5 = color_image[int(ch_poi[5][1]) - delta: int(ch_poi[5][1]) + delta, int(ch_poi[5][0]) - delta: int(ch_poi[5][0]) + delta]
 					# for i in range(0,2):
 						# koord[i][0], koord[i][1] = good_features_to_track(corner_picture[i])
 
 					koord[0][0], koord[0][1] = good_features_to_track(corner_picture_0)
 					koord[1][0], koord[1][1] = good_features_to_track(corner_picture_1)
+					koord[2][0], koord[2][1] = good_features_to_track(corner_picture_2)
+					koord[3][0], koord[3][1] = good_features_to_track(corner_picture_3)
+					koord[4][0], koord[4][1] = good_features_to_track(corner_picture_4)
+					koord[5][0], koord[5][1] = good_features_to_track(corner_picture_5)
 
-					for i in range(0,2):
+					for i in range(0,6):
 						koord[i][0] = ch_poi[i][0] - delta + koord[i][0]
 						koord[i][1] = ch_poi[i][1] - delta + koord[i][1]
 
-					for i in range(0,2):
+					for i in range(0,6):
 						cv2.rectangle(color_image, (int(koord[i][0]) - delta, int(koord[i][1]) - delta), (int(koord[i][0]) + delta, int(koord[i][1])+delta), green, 0)
 					# cv2.rectangle(color_image, (int(koord[0][0]) - delta, int(koord[0][1]) - delta), (int(koord[0][0]) + delta, int(koord[0][1])+delta), green, 0)
 					# cv2.rectangle(color_image, (int(koord[1][0]) - delta, int(koord[1][1]) - delta), (int(koord[1][0]) + delta, int(koord[1][1])+delta), green, 0)
@@ -177,12 +184,12 @@ def main():
 				zero = 0
 				np.float64(zero)
 				if step_3 == True:
-					for i in range(0,2):
+					for i in range(0,6):
 						z = aligned_depth_frame.get_distance(int(koord[i][0]), int(koord[i][1]))
 						# print z
 						if z > 0:
 							koord[i][2] = z
-					if koord[0][2] > 0 and koord[1][2] > 0:
+					if koord[0][2] > 0 and koord[1][2] > 0 and koord[2][2] > 0 and koord[3][2] > 0 and koord[4][2] > 0 and koord[5][2] > 0:
 						step_3 = False
 						step_4 = True
 			except:
@@ -190,19 +197,24 @@ def main():
 
 			try:
 				if step_4 == True:
-					for i in range(0,2):
-						depth_point[i] = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[i][0],koord[i][1]], koord[i][2])
-						# depth_point_1 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[0][0], koord[0][1]], koord[0][2])
-						# depth_point_2 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[1][0], koord[1][1]], koord[1][2])
+					# for i in range(0,6):
+						# depth_point[i] = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[i][0],koord[i][1]], koord[i][2])
+					depth_point_1 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[0][0], koord[0][1]], koord[0][2])
+					depth_point_2 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[1][0], koord[1][1]], koord[1][2])
+					depth_point_3 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[2][0], koord[2][1]], koord[2][2])
+					depth_point_4 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[3][0], koord[3][1]], koord[3][2])
+					depth_point_5 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[4][0], koord[4][1]], koord[4][2])
+					depth_point_6 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[5][0], koord[5][1]], koord[5][2])
+
 					# vector_12 = np.zeros((1,3))
 					# for i in range(0,3):
 						# vector_12[0][i] = depth_point_1[i] - depth_point_2[i]
-					print ("the position of point 1 is " + str(depth_point[1]))
-					print ("the position of point 2 is " + str(depth_point[2]))
+					print ("the position of point 1 is " + str(depth_point_1))
+					print ("the position of point 2 is " + str(depth_point_6))
 
-					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/iteratetest.csv", 'a') as csvfile: 
+					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/iteracc.csv", 'a') as csvfile: 
 						filewriter = csv.writer(csvfile, delimiter = ',', quoting=csv.QUOTE_NONE, lineterminator = '\n')
-						filewriter.writerow(depth_point[0] + depth_point[1])
+						filewriter.writerow(depth_point_1 + depth_point_2 + depth_point_3 + depth_point_4 + depth_point_5 + depth_point_6)
 					# print ("the vector between the two points is " + str(vector_12))
 					# dist_12 = math.sqrt(vector_12[0][0]**2 + vector_12[0][1]**2 + vector_12[0][2]**2)
 					# dist_12 = dist_12 * 1000

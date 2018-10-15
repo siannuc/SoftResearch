@@ -70,10 +70,10 @@ DEFINE STREAM PROPERTIES
 #streams
 pipeline = rs.pipeline() 														#create pipeline
 config = rs.config()															#create a configuration
-# config.enable_stream(rs.stream.color, columns, rows, rs.format.bgr8, f_rate)	#get the color stream
-# config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
-# config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
-# config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
+config.enable_stream(rs.stream.color, columns, rows, rs.format.bgr8, f_rate)	#get the color stream
+config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
+config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
+config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
 
 # start streaming
 profile = config.resolve(pipeline)
@@ -88,9 +88,9 @@ print("Depth Scale is: ",depth_scale)
 align_to = rs.stream.color
 align = rs.align(align_to)
 
-filename = input("Please Enter a Filename:  ")
-print("File location: C:/Users/Steve/Documents/GitHub/SoftResearch/Data/" + filename + ".csv")
-filelocation = "C:/Users/Steve/Documents/GitHub/SoftResearch/Data/" + filename + ".csv"
+# filename = input("Please Enter a Filename:  ")
+# print("File location: C:/Users/Steve/Documents/GitHub/SoftResearch/Data/" + filename + ".csv")
+# filelocation = "C:/Users/Steve/Documents/GitHub/SoftResearch/Data/" + filename + ".csv"
 
 """
 MAIN PROGRAM
@@ -191,7 +191,7 @@ def main():
 					print ("the position of point 1 is " + str(depth_point_1))
 					print ("the position of point 2 is " + str(depth_point_2))
 
-					with open(filelocation, 'a') as csvfile: 
+					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/dub3.csv", 'a') as csvfile: 
 						filewriter = csv.writer(csvfile, delimiter = ',', quoting=csv.QUOTE_NONE, lineterminator = '\n')
 						filewriter.writerow(depth_point_1 + depth_point_2)
 					# print ("the vector between the two points is " + str(vector_12))
