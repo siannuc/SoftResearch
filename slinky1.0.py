@@ -14,6 +14,15 @@ import csv
 """
 	declare variables
 """
+# Center is aligned tot he LEFT imager (as in its left eye)
+# z+ is striaht ahead
+# x + is the right
+# y + is down
+
+# Camera Matrix
+# [fx 0 cx; 0 fy cy; 0 0 1]
+# (fx,fy) are focal point
+# (cx,cy)  are optical centers
 
 # picture properties
 rows = 360
@@ -70,10 +79,9 @@ DEFINE STREAM PROPERTIES
 #streams
 pipeline = rs.pipeline() 														#create pipeline
 config = rs.config()															#create a configuration
-config.enable_stream(rs.stream.color, columns, rows, rs.format.bgr8, f_rate)	#get the color stream
-config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
-config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
-config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
+#config.enable_stream(rs.stream.depth, columns, rows, rs.format.z16, f_rate)		#get the depth stream
+#config.enable_stream(rs.stream.infrared, 1, columns, rows, rs.format.y8, f_rate) #get left IR streams
+#config.enable_stream(rs.stream.infrared, 2, columns, rows, rs.format.y8, f_rate) #get right IR streams
 
 # start streaming
 profile = config.resolve(pipeline)
@@ -83,6 +91,10 @@ profile = pipeline.start(config)
 depth_sensor = profile.get_device().first_depth_sensor()
 depth_scale = depth_sensor.get_depth_scale()
 print("Depth Scale is: ",depth_scale)
+
+# clipping ditsance is in meters
+clippingdistance_m = 1
+clippingdistance = clippingdistance_m / depth_scale
 
 # create an align object
 align_to = rs.stream.color
@@ -191,7 +203,7 @@ def main():
 					print ("the position of point 1 is " + str(depth_point_1))
 					print ("the position of point 2 is " + str(depth_point_2))
 
-					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/dub3.csv", 'a') as csvfile: 
+					with open("C:/Users/Steve/Documents/GitHub/SoftResearch/Data/zeros.csv", 'a') as csvfile: 
 						filewriter = csv.writer(csvfile, delimiter = ',', quoting=csv.QUOTE_NONE, lineterminator = '\n')
 						filewriter.writerow(depth_point_1 + depth_point_2)
 					# print ("the vector between the two points is " + str(vector_12))
