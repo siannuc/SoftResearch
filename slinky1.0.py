@@ -61,8 +61,10 @@ def get_mouse_position(event, x, y, flags, param):
 
 def good_features_to_track(src_color):
 	gray = cv2.cvtColor(src_color, cv2.COLOR_BGR2GRAY)
+	# finds good, sharp corners witin frame
 	corners = cv2.goodFeaturesToTrack(gray, 1, 0.01, 10)
 	corners = np.int0(corners)
+	# saves corners found and outputs them
 	for i in corners:
 		x_corner, y_corner = i.ravel()
 	return x_corner, y_corner
@@ -139,9 +141,12 @@ def main():
 			delta = 8
 			try:
 
+				# Hold 'k' to intialize program. Once Test 2 is printed, the users clicks will be saved and registered. 
 				if cv2.waitKey(1) == ord('k') or step_1 == True:
 					print("Test2")
 					step_1 = True
+
+					# On click, get mouse postition and create rois about them. 
 					cv2.setMouseCallback('Align Example', get_mouse_position)
 					cv2.rectangle(color_image, (int(ch_poi[0][0]) - delta, int(ch_poi[0][1]) - delta), (int(ch_poi[0][0]) + delta, int(ch_poi[0][1]) + delta), red, 0)
 					cv2.rectangle(color_image, (int(ch_poi[1][0]) - delta, int(ch_poi[1][1]) - delta), (int(ch_poi[1][0]) + delta, int(ch_poi[1][1]) + delta), red, 0)
@@ -159,18 +164,20 @@ def main():
 
 			try:
 				if step_2 == True:
-
+					# pulls a small picture of the overall frame
 					corner_picture_0 = color_image[int(ch_poi[0][1]) - delta: int(ch_poi[0][1]) + delta, int(ch_poi[0][0]) - delta: int(ch_poi[0][0]) + delta]
 					corner_picture_1 = color_image[int(ch_poi[1][1]) - delta: int(ch_poi[1][1]) + delta, int(ch_poi[1][0]) - delta: int(ch_poi[1][0]) + delta]
 
-
+					# small frame is pushed to gftt which finds sharp corners to pull data off of
 					koord[0][0], koord[0][1] = good_features_to_track(corner_picture_0)
 					koord[1][0], koord[1][1] = good_features_to_track(corner_picture_1)
 
+					# edits to create better coordinates
 					for i in range(0,2):
 						koord[i][0] = ch_poi[i][0] - delta + koord[i][0]
 						koord[i][1] = ch_poi[i][1] - delta + koord[i][1]
 
+					# updates rectangele roi to green to show that updated
 					cv2.rectangle(color_image, (int(koord[0][0]) - delta, int(koord[0][1]) - delta), (int(koord[0][0]) + delta, int(koord[0][1])+delta), green, 0)
 					cv2.rectangle(color_image, (int(koord[1][0]) - delta, int(koord[1][1]) - delta), (int(koord[1][0]) + delta, int(koord[1][1])+delta), green, 0)
 
@@ -183,9 +190,10 @@ def main():
 				np.float64(zero)
 				if step_3 == True:
 					for i in range(0,2):
+						# pulls depth from aligned frames
 						z = aligned_depth_frame.get_distance(int(koord[i][0]), int(koord[i][1]))
-						# print z
-						if z > 0:
+						# print z as part of koord vector
+						if z > 0: # all depths from camera are positive
 							koord[i][2] = z
 					if koord[0][2] > 0 and koord[1][2] > 0:
 						step_3 = False
@@ -195,6 +203,7 @@ def main():
 
 			try:
 				if step_4 == True:
+					# depth points are passed through from deprojected fram so all are in proper formatting 
 					depth_point_1 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[0][0], koord[0][1]], koord[0][2])
 					depth_point_2 = rs.rs2_deproject_pixel_to_point(depth_intrin, [koord[1][0], koord[1][1]], koord[1][2])
 					vector_12 = np.zeros((1,3))
