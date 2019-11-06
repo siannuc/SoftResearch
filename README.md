@@ -4,5 +4,5 @@ In order to validate the deflections and measurements of the created soft actuat
 
 A RealSense D415 is used to obtain depth from the postional markings. 
 
-To get the code to run 'k' will start the loop which initalizes the ability to obtain positional values for 2 clicked pixels on the window. 
+To get the code to run, press and hold 'k' to start the loop which initalizes the ability to obtain positional values for 2 clicked pixels on the window. 
 
