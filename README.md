@@ -1,8 +1,10 @@
 # SoftResearch
 
-In order to validate the deflections and measurements of the created soft actuators, a program is needed to obtain three dimensional postional values of the soft actuator. 
+Python programs to obtain three dimensional positional values using a Intel RealSense D415.
 
-A RealSense D415 is used to obtain depth from the postional markings. 
+Download RealSense API and python wrappers before running. Would recommoned following examples and making sure you can connect to the camera first. 
 
-To get the code to run, press and hold 'k' to start the loop which initalizes the ability to obtain positional values for 2 clicked pixels on the window. 
+To get the code to run, press and hold 'k' to start the loop which initalizes the ability to obtain positional values for 2 clicked pixels on the window.
+
+Next, implementing streamlined method for code than asks for number of points during initilzation.
 
