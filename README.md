@@ -4,7 +4,6 @@ Python programs to obtain three dimensional positional values using a Intel Real
 
 Download RealSense API and python wrappers before running. Would recommoned following examples and making sure you can connect to the camera first. 
 
-To get the code to run, press and hold 'k' to start the loop which initalizes the ability to obtain positional values for 2 clicked pixels on the window.
+pip install pyrealsense2
 
-Next, implementing streamlined method for code than asks for number of points during initilzation.
-
+To get the code to run, press and hold 'k' to start process for data recorder. Click points on CV stream. Data will be saved in .CSV file in location that can be set in code. Data is formatted (X1,Y1,Z1...Xn, Yn, Zn) per column. The number of points registered per run is set by the user.
