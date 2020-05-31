@@ -6,4 +6,4 @@ Download RealSense API and python wrappers before running. Would recommoned foll
 
 pip install pyrealsense2
 
-To get the code to run, press and hold 'k' to start process for data recorder. Click points on CV stream. Data will be saved in .CSV file in location that can be set in code. Data is formatted (X1,Y1,Z1...Xn, Yn, Zn) per column. The number of points registered per run is set by the user.
+To get the code to run, press and hold 'k' to start process for data recorder. Click points on CV stream. Data will be saved in .CSV file in location that can be set in code. Data is formatted (X1,Y1,Z1...Xn, Yn, Zn) per row, with each row saved for every frame. The number of points registered per run is set by the user.
